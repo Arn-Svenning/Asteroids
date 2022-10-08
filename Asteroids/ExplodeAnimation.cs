@@ -1,18 +1,15 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-
-
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Asteroids
 {
-    internal class Animation
+    internal class ExplodeAnimation
     {
         Texture2D animation;
         Rectangle sourceRectangle;
@@ -28,7 +25,7 @@ namespace Asteroids
         int frameHeight;
         bool looping;
 
-        public Animation(ContentManager Content, string asset, float frameSpeed, int numberOfFrames, bool looping)
+        public ExplodeAnimation(ContentManager Content, string asset, float frameSpeed, int numberOfFrames, bool looping)
         {
             this.frameTime = frameSpeed;
             this.numberOfFrames = numberOfFrames;
@@ -36,21 +33,20 @@ namespace Asteroids
             this.animation = Content.Load<Texture2D>(asset);
             frameWidth = (animation.Width / numberOfFrames);
             frameHeight = (animation.Height);
-            position = Vector2.Zero;
+            position = new Vector2(frameWidth, frameHeight);
         }
 
         public void playAnimation(GameTime gameTime)
         {
             elapsedTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-            sourceRectangle = new Rectangle(currentFrame * frameWidth ,0, frameWidth , frameHeight);
-            
-            /////Looping the spriteSheet
+            sourceRectangle = new Rectangle(currentFrame * frameWidth, 0, frameWidth, frameHeight);
+
             if (elapsedTime >= frameTime)
             {
                 if (currentFrame >= numberOfFrames - 1)
                 {
                     currentFrame = 0;
-                   
+
                 }
                 else
                 {
@@ -59,6 +55,7 @@ namespace Asteroids
                 elapsedTime = 0;
             }
         }
+
         public void draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(animation, position, sourceRectangle, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
